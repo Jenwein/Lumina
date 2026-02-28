@@ -1,0 +1,13 @@
+# .agent/tasks/task_{id}.md (Ephemeral - Draft Pad)
+## Requirements
+- {Requirement Details}
+
+## Chain of Thought (CoT)
+- {Reasoning Process}
+
+## Error Tracking
+- {Log of failures/observations}
+
+## Constraints
+- Mark as "Completed" after task.
+- Do NOT read history task files in new sessions.

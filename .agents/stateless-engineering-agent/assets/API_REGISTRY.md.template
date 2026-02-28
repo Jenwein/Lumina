@@ -1,0 +1,10 @@
+# .agent/API_REGISTRY.md (Warm - Contract Center)
+## Modules & Contracts
+- **Module Name**: {Name}
+  - **API Signature**: {Signature}
+  - **Memory Ownership**: {Lifecycle}
+  - **Thread Safety**: {Constraints}
+  - **Side Effects**: {Description}
+
+## Constraints
+- Mandatory SDD. Update contract BEFORE writing business logic.
