@@ -1,8 +1,0 @@
-# .agent/ROADMAP.md (Warm - Macro Blueprint)
-- [ ] Task 1: {Description}
-- [ ] Task 2: {Description}
-- [ ] Task 3: {Description}
-
-## Constraints
-- Use Markdown checkboxes ([ ] / [x]).
-- Only read/write during task phase transitions.

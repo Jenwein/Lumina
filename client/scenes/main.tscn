@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://main_scene"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Pet" type="Node2D" parent="."]
+position = Vector2(960, 540)
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 10

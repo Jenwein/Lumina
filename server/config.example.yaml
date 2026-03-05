@@ -1,0 +1,33 @@
+# Lumina Server Configuration Example
+# Copy this file to config.yaml and fill in your values.
+
+server:
+  host: "127.0.0.1"
+  port: 8765
+
+llm:
+  active_provider: "default"
+  providers:
+    - name: "default"
+      api_base: "https://api.openai.com/v1"
+      api_key: "sk-your-key-here"
+      model: "gpt-4o"
+      max_tokens: 4096
+      temperature: 0.7
+
+agent:
+  system_prompt: "你是 Lumina，一个可爱又能干的桌面助手。"
+  max_iterations: 10
+
+safety:
+  single_step_mode: false
+  confirmation_timeout_seconds: 30
+
+privacy:
+  blacklisted_apps: []
+  mask_regions: []
+
+power:
+  idle_timeout_seconds: 60
+  low_power_fps: 5
+  active_fps: 60
