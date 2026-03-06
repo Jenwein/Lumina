@@ -11,6 +11,12 @@
 - **Status**: In Progress | Completed | Blocked
 - **Complexity**: Moderate | High
 
+## Documentation Index
+- **Changelog**: [changelog.md](./changelog.md)
+- **API Registry**: [Index](./api_registry/)
+  - [Module A](./api_registry/module_a.md)
+  - [Module B](./api_registry/module_b.md)
+
 ## Objective
 [1–2 sentences describing the overall goal and deliverable]
 
@@ -22,17 +28,17 @@
 
 ### Stage 1: [Label] *(omit stage grouping for moderate tasks)*
 
-| Phase | Title | Status | Dependencies |
-|-------|-------|--------|--------------|
-| 01 | [Data Model] | [ ] Pending | — |
-| 02 | [Interfaces] | [ ] Pending | Phase 01 |
-| 03 | [Implementation] | [ ] Pending | Phase 01, 02 |
+| Phase | Title | Status | Dependencies | File |
+|-------|-------|--------|--------------|------|
+| 01 | [Data Model] | [ ] Pending | — | [phase_01.md](./stages/stage_01_label/phase_01_label.md) |
+| 02 | [Interfaces] | [ ] Pending | Phase 01 | [phase_02.md](./stages/stage_01_label/phase_02_label.md) |
+| 03 | [Implementation] | [ ] Pending | Phase 01, 02 | [phase_03.md](./stages/stage_01_label/phase_03_label.md) |
 
 ### Stage 2: [Label]
 
-| Phase | Title | Status | Dependencies |
-|-------|-------|--------|--------------|
-| 04 | [Integration] | [ ] Pending | Phase 03 |
+| Phase | Title | Status | Dependencies | File |
+|-------|-------|--------|--------------|------|
+| 04 | [Integration] | [ ] Pending | Phase 03 | [phase_04.md](./stages/stage_02_label/phase_04_label.md) |
 
 ## Notes
 - [Any cross-cutting concerns, risks, or open questions]

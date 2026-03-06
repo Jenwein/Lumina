@@ -67,7 +67,10 @@ docs/tasks/<task_name>/
 
 ### 2.3 Generate `master_overview.md`
 
-Use the master overview template from [templates.md](templates.md). This file is the **Single Source of Truth (SSOT)** — it tracks every phase's status and must be updated at the end of each phase.
+Use the master overview template from [templates.md](templates.md). This file is the **Single Source of Truth (SSOT)** and the **Central Index** for the task. It must:
+1.  **Index Resources**: Provide direct links to `changelog.md` and the `api_registry/` directory (or its specific module files).
+2.  **Index Phases**: The `Phase Map` must contain relative links to each `phase_XX.md` file.
+3.  **Track Status**: It tracks every phase's status and must be updated at the end of each phase.
 
 ### 2.4 Generate Phase Documents
 
