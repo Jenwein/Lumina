@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8k8l6j4r4y2y"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_root"]
+[ext_resource type="Script" path="res://scripts/ws_client.gd" id="2_ws"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_root")
+
+[node name="WSClient" type="Node" parent="."]
+script = ExtResource("2_ws")
+heartbeat_interval = 30.0

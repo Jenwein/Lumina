@@ -1,0 +1,17 @@
+[project]
+name = "lumina"
+version = "0.1.0"
+description = "Lumina Logic Server"
+authors = [{ name = "Lumina Team" }]
+dependencies = [
+    "websockets>=13.0",
+    "pyyaml>=6.0",
+    "pydantic>=2.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["lumina*"]
+
+[project.scripts]
+lumina = "lumina.__main__:main"

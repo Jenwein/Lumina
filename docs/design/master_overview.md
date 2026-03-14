@@ -34,7 +34,7 @@
 
 | Phase | Title | Status | File Path | Dependencies |
 |-------|-------|--------|-----------|--------------|
-| 01 | 项目基础设施与 WebSocket 通信协议 | [ ] Pending | `./phases/phase_01_infrastructure.md` | — |
+| 01 | 项目基础设施与 WebSocket 通信协议 | [x] Done | `./phases/phase_01_infrastructure.md` | — |
 | 02 | Godot 桌宠基础 | [ ] Pending | `./phases/phase_02_godot_pet.md` | Phase 01 |
 
 ### Stage 2: 核心智能 (V0.2)

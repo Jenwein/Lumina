@@ -8,9 +8,9 @@
 
 - **Prerequisite phases**: 无 (首个阶段)
 - **Reference Materials**:
-    - [ ] [PRD — 技术路线图与架构](../../../PRD.md) §3
-    - [ ] [Godot WebSocketPeer 文档](../../godot/godot-docs/tutorials/networking/websocket.rst)
-    - [ ] [Godot DisplayServer 文档](../../godot/godot-docs/classes/class_displayserver.rst)
+    - [x] [PRD — 技术路线图与架构](../../../PRD.md) §3
+    - [x] [Godot WebSocketPeer 文档](../../godot/godot-docs/tutorials/networking/websocket.rst)
+    - [x] [Godot DisplayServer 文档](../../godot/godot-docs/classes/class_displayserver.rst)
 - **Source files to read**:
     - [ ] 本阶段为初始阶段，无已有源码
 
@@ -235,17 +235,17 @@ func _handle_reconnect() -> void: ...
 
 ## §6 Acceptance Criteria
 
-- [ ] `python -m lumina` 启动后在终端显示 "Listening on ws://localhost:8765"
-- [ ] Godot 客户端启动后自动连接，双端完成 `client_ready` / `server_ready` 握手
-- [ ] Python 端发送 `pet_command` 消息，Godot 端正确接收并解析（打印到控制台）
-- [ ] Godot 端发送 `user_message`，Python 端正确接收并回显
-- [ ] 断开连接后，Godot 客户端在 5s 内自动重连
-- [ ] 心跳超时 90s 后服务端主动断开连接
-- [ ] `pytest server/tests/test_ws.py` 全部通过
+- [x] `python -m lumina` 启动后在终端显示 "Listening on ws://localhost:8765"
+- [x] Godot 客户端启动后自动连接，双端完成 `client_ready` / `server_ready` 握手
+- [x] Python 端发送 `pet_command` 消息，Godot 端正确接收并解析（打印到控制台）
+- [x] Godot 端发送 `user_message`，Python 端正确接收并回显
+- [x] 断开连接后，Godot 客户端在 5s 内自动重连
+- [x] 心跳超时 90s 后服务端主动断开连接
+- [x] `pytest server/tests/test_ws.py` 全部通过
 
 ## §7 State Teardown Checklist
 
-- [ ] **Phase Document Updated** (if design changed during implementation)
-- [ ] `changelog.md` updated
-- [ ] `api_registry/websocket_protocol.md` updated
-- [ ] `master_overview.md` Phase 01 status set to `[x] Done`
+- [x] **Phase Document Updated** (if design changed during implementation)
+- [x] `changelog.md` updated
+- [x] `api_registry/websocket_protocol.md` updated
+- [x] `master_overview.md` Phase 01 status set to `[x] Done`

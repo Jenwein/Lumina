@@ -24,6 +24,15 @@
 - CI/CD 流水线与自动化测试框架的具体配置
 - 国际化 (i18n) 方案
 
+## [0.1.0] - 2026-03-14
+
+### Added
+- **Project Structure**: Initialized `server/` (Python) and `client/` (Godot) directories.
+- **WebSocket Protocol**: Implemented a JSON-based bidirectional communication protocol for Python-Godot interaction.
+- **Python Server**: Asyncio-based WebSocket server with single-client locking and heartbeat support.
+- **Godot Client**: Robust `LuminaWSClient` with automatic reconnection and handshake handling.
+- **Integration Tests**: Automated tests for connection handshake, heartbeat, and multiple client rejection.
+
 ---
 
 *(Append new entries above this line)*
