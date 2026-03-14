@@ -24,7 +24,16 @@
 - CI/CD 流水线与自动化测试框架的具体配置
 - 国际化 (i18n) 方案
 
-## [0.1.0] - 2026-03-14
+## [0.2.0] - 2026-03-15
+
+### Added
+- 实现 Agent 决策引擎 (Phase 03)
+- `LLMClient` 支持 OpenAI 兼容 API 和 Function Calling
+- `ReActLoop` 实现基于 ReAct 模式的自主推理循环
+- `AgentCore` 负责对话历史管理、工具注册与状态回调
+- WebSocket 服务集成 Agent 推理，支持实时状态更新 (`agent_status`)
+- 单元测试 `server/tests/test_agent.py` 验证核心逻辑
+- 扩展配置支持多模型切换和 Agent 参数设置
 
 ### Added
 - **Project Structure**: Initialized `server/` (Python) and `client/` (Godot) directories.

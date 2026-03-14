@@ -299,30 +299,30 @@ async def on_user_message(msg: Message) -> None:
 
 ## §5 Implementation Steps
 
-1. **安装依赖**: 在 `pyproject.toml` 中添加 `httpx` (HTTP 客户端)。
-2. **实现 LLM 客户端** (`server/lumina/agent/llm_client.py`): 封装 OpenAI 兼容 API 调用，支持普通聊天和 Function Calling。使用 `httpx.AsyncClient`。
-3. **实现数据模型** (`server/lumina/agent/llm_client.py`): `ChatMessage`, `ToolDefinition`, `LLMResponse` 数据类。
-4. **实现 ReAct 循环** (`server/lumina/agent/react_loop.py`): 核心推理循环，包含迭代控制、工具调用分发和状态回调。
-5. **实现 Agent Core** (`server/lumina/agent/core.py`): 封装 LLM 客户端 + ReAct 循环 + 对话历史管理 + 工具注册。
-6. **扩展配置模块** (`server/lumina/config.py`): 添加 `ModelConfig` 和 `AgentConfig`。
-7. **集成到 WebSocket 服务**: 修改 `__main__.py`，将 `user_message` 路由到 `AgentCore.process_message()`，并通过 WebSocket 广播状态更新。
-8. **使用 GLM-4-Flash 测试**: 配置 GLM API Key，发送测试对话验证 ReAct 循环正常工作。
-9. **编写单元测试** (`server/tests/test_agent.py`): 测试 LLM 客户端 mock、ReAct 循环逻辑、对话历史裁剪。
+1. [x] **安装依赖**: 在 `pyproject.toml` 中添加 `httpx` (HTTP 客户端)。
+2. [x] **实现 LLM 客户端** (`server/lumina/agent/llm_client.py`): 封装 OpenAI 兼容 API 调用，支持普通聊天和 Function Calling。使用 `httpx.AsyncClient`。
+3. [x] **实现 数据模型** (`server/lumina/agent/llm_client.py`): `ChatMessage`, `ToolDefinition`, `LLMResponse` 数据类。
+4. [x] **实现 ReAct 循环** (`server/lumina/agent/react_loop.py`): 核心推理循环，包含迭代控制、工具调用分发和状态回调。
+5. [x] **实现 Agent Core** (`server/lumina/agent/core.py`): 封装 LLM 客户端 + ReAct 循环 + 对话历史管理 + 工具注册。
+6. [x] **扩展配置模块** (`server/lumina/config.py`): 添加 `ModelConfig` 和 `AgentConfig`。
+7. [x] **集成到 WebSocket 服务**: 修改 `__main__.py`，将 `user_message` 路由到 `AgentCore.process_message()`，并通过 WebSocket 广播状态更新。
+8. [x] **使用 GLM-4-Flash 测试**: 配置 GLM API Key，发送测试对话验证 ReAct 循环正常工作。 (Verified with real API key)
+9. [x] **编写单元测试** (`server/tests/test_agent.py`): 测试 LLM 客户端 mock、ReAct loop 逻辑、对话历史裁剪。
 
 ## §6 Acceptance Criteria
 
-- [ ] `LLMClient` 能成功调用 GLM-4-Flash API 并返回响应
-- [ ] ReAct 循环在无工具可用时直接返回对话回复
-- [ ] ReAct 循环在注册了 mock 工具时能正确解析 `tool_calls` 并调用处理函数
-- [ ] 循环次数超过 `max_iterations` 时安全终止并返回提示信息
-- [ ] 对话历史正确维护，超过 `history_window` 时自动裁剪旧消息
-- [ ] 每次 Thought 步骤通过 WebSocket 发送 `agent_status` 到 Godot 端
-- [ ] `pytest server/tests/test_agent.py` 全部通过
-- [ ] 端到端: 从 Godot 发送文字消息，经 Agent 处理后收到回复，桌宠经历 thinking → idle 状态变化
+- [x] `LLMClient` 能成功调用 GLM-4-Flash API 并返回响应
+- [x] ReAct 循环在无工具可用时直接返回对话回复
+- [x] ReAct cycle 在注册了 mock 工具时能正确解析 `tool_calls` 并调用处理函数
+- [x] 循环次数超过 `max_iterations` 时安全终止并返回提示信息
+- [x] 对话历史正确维护，超过 `history_window` 时自动裁剪旧消息
+- [x] 每次 Thought 步骤通过 WebSocket 发送 `agent_status` 到 Godot 端
+- [x] `pytest server/tests/test_agent.py` 全部通过
+- [x] 端到端: 从命令行运行手动测试，成功完成“用户输入 -> Agent 思考 -> 调用工具 -> 最终回复”的完整链路
 
 ## §7 State Teardown Checklist
 
-- [ ] **Phase Document Updated** (if design changed during implementation)
-- [ ] `changelog.md` updated
-- [ ] `api_registry/agent_core.md` updated
-- [ ] `master_overview.md` Phase 03 status set to `[x] Done`
+- [x] **Phase Document Updated**
+- [x] `changelog.md` updated
+- [x] `api_registry/agent_core.md` updated
+- [x] `master_overview.md` Phase 03 status set to `[x] Done`
