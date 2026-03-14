@@ -51,12 +51,38 @@ async def async_main():
         temperature=active_model_config.temperature
     )
     
+    from lumina.tools import (
+        ToolRegistry, ReadFileTool, WriteFileTool, DeleteFileTool,
+        ListDirectoryTool, CreateDirectoryTool, MoveFileTool,
+        LaunchAppTool, CloseAppTool, GetSystemInfoTool, GetRunningProcessesTool
+    )
+    
+    # Initialize Tool Registry
+    registry = ToolRegistry()
+    registry.register(ReadFileTool())
+    registry.register(WriteFileTool())
+    registry.register(DeleteFileTool())
+    registry.register(ListDirectoryTool())
+    registry.register(CreateDirectoryTool())
+    registry.register(MoveFileTool())
+    registry.register(LaunchAppTool())
+    registry.register(CloseAppTool())
+    registry.register(GetSystemInfoTool())
+    registry.register(GetRunningProcessesTool())
+
     agent = AgentCore(
         llm_client=llm_client,
         system_prompt=config.agent.system_prompt,
         max_iterations=config.agent.max_react_iterations,
         history_window=config.agent.history_window
     )
+    
+    # Register tools to agent
+    for tool in registry.tools.values():
+        agent.register_tool(
+            tool.to_tool_definition(),
+            tool.execute
+        )
     
     server = LuminaWSServer(
         host=config.ws_host,

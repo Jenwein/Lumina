@@ -8,12 +8,12 @@
 
 - **Prerequisite phases**: Phase 03 (`[x] Done`)
 - **Reference Materials**:
-    - [ ] [PRD — 工具系统](../../../PRD.md) §2.2
-    - [ ] [OpenAI Function Calling 规范](https://platform.openai.com/docs/guides/function-calling)
+    - [x] [PRD — 工具系统](../../../PRD.md) §2.2
+    - [x] [OpenAI Function Calling 规范](https://platform.openai.com/docs/guides/function-calling)
 - **Source files to read**:
-    - [ ] `server/lumina/agent/core.py` (Phase 03 — `register_tool` 接口)
-    - [ ] `server/lumina/agent/llm_client.py` (Phase 03 — `ToolDefinition`)
-    - [ ] `server/lumina/agent/react_loop.py` (Phase 03 — 工具调用分发)
+    - [x] `server/lumina/agent/core.py` (Phase 03 — `register_tool` 接口)
+    - [x] `server/lumina/agent/llm_client.py` (Phase 03 — `ToolDefinition`)
+    - [x] `server/lumina/agent/react_loop.py` (Phase 03 — 工具调用分发)
 
 ## §3 Design & Constraints
 
@@ -273,19 +273,19 @@ for tool in registry.tools.values():
 
 ## §6 Acceptance Criteria
 
-- [ ] `ToolRegistry` 能正确注册和发现所有工具
-- [ ] `list_definitions()` 返回的格式与 OpenAI Function Calling 兼容
-- [ ] `read_file` 能读取存在的文件，不存在时返回友好错误信息
-- [ ] `write_file` 能创建和覆盖文件
-- [ ] `delete_file` 标记为 HIGH 风险等级
-- [ ] `launch_app` 能启动 notepad 等简单应用
-- [ ] `get_system_info` 返回包含 OS、CPU、内存信息的格式化字符串
-- [ ] Agent 能在对话中自动选择正确的工具（通过 GLM-4-Flash 测试）
-- [ ] `pytest server/tests/test_tools.py` 全部通过
+- [x] `ToolRegistry` 能正确注册和发现所有工具
+- [x] `list_definitions()` 返回的格式与 OpenAI Function Calling 兼容
+- [x] `read_file` 能读取存在的文件，不存在时返回友好错误信息
+- [x] `write_file` 能创建和覆盖文件
+- [x] `delete_file` 标记为 HIGH 风险等级
+- [x] `launch_app` 能启动 notepad 等简单应用
+- [x] `get_system_info` 返回包含 OS、CPU、内存信息的格式化字符串
+- [x] Agent 能在对话中自动选择正确的工具（通过 GLM-4-Flash 测试）
+- [x] `pytest server/tests/test_tools.py` 全部通过
 
 ## §7 State Teardown Checklist
 
-- [ ] **Phase Document Updated** (if design changed during implementation)
-- [ ] `changelog.md` updated
-- [ ] `api_registry/tool_system.md` updated
-- [ ] `master_overview.md` Phase 04 status set to `[x] Done`
+- [x] **Phase Document Updated** (if design changed during implementation)
+- [x] `changelog.md` updated
+- [x] `api_registry/tool_system.md` updated
+- [x] `master_overview.md` Phase 04 status set to `[x] Done`

@@ -24,6 +24,18 @@
 - CI/CD 流水线与自动化测试框架的具体配置
 - 国际化 (i18n) 方案
 
+## [0.2.1] - 2026-03-15
+
+### Added
+- **Tool System (Phase 04)**: Implemented a scalable tool registration and discovery framework.
+- **Base Components**: Created `BaseTool` and `ToolRegistry` with risk level management (LOW/MEDIUM/HIGH).
+- **File Tools**: Added `read_file`, `write_file`, `list_directory`, `create_directory`, `delete_file`, and `move_file`.
+- **Application Tools**: Added `launch_app` (async subprocess) and `close_app` (psutil-based).
+- **System Tools**: Added `get_system_info` and `get_running_processes`.
+- **Integration**: Registered all tools to `AgentCore` in `server/lumina/__main__.py`.
+- **Tests**: Added comprehensive unit tests in `server/tests/test_tools.py` for all tool operations and the registry.
+- **Dependencies**: Added `psutil` and `aiofiles` to `pyproject.toml`.
+
 ## [0.2.0] - 2026-03-15
 
 ### Added

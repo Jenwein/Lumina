@@ -42,7 +42,7 @@
 | Phase | Title | Status | File Path | Dependencies |
 |-------|-------|--------|-----------|--------------|
 | 03 | Agent 决策引擎 | [x] Done | `./phases/phase_03_agent_engine.md` | Phase 01 |
-| 04 | 工具系统 | [ ] Pending | `./phases/phase_04_tool_system.md` | Phase 03 |
+| 04 | 工具系统 | [x] Done | `./phases/phase_04_tool_system.md` | Phase 03 |
 
 ### Stage 3: 视觉智能 (V0.3)
 
