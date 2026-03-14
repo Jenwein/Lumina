@@ -5,7 +5,7 @@ signal connected
 signal disconnected
 signal message_received(msg: Dictionary)
 
-@export var server_url: String = "ws://localhost:8765"
+@export var server_url: String = "ws://127.0.0.1:8765"
 @export var auto_reconnect: bool = true
 @export var reconnect_delay: float = 5.0
 @export var heartbeat_interval: float = 30.0
@@ -13,6 +13,7 @@ signal message_received(msg: Dictionary)
 var socket: WebSocketPeer = WebSocketPeer.new()
 var is_connected_to_server: bool = false
 var last_heartbeat_time: float = 0.0
+var is_connecting: bool = false
 
 func _ready() -> void:
 	connect_to_server()
@@ -22,6 +23,7 @@ func _process(_delta: float) -> void:
 	var state = socket.get_ready_state()
 	
 	if state == WebSocketPeer.STATE_OPEN:
+		is_connecting = false
 		if not is_connected_to_server:
 			_on_connected()
 		
@@ -35,15 +37,23 @@ func _process(_delta: float) -> void:
 		if is_connected_to_server:
 			_on_disconnected()
 		
-		if auto_reconnect:
-			await get_tree().create_timer(reconnect_delay).timeout
-			connect_to_server()
+		if auto_reconnect and not is_connecting:
+			_retry_connection()
+
+func _retry_connection() -> void:
+	is_connecting = true
+	await get_tree().create_timer(reconnect_delay).timeout
+	connect_to_server()
 
 func connect_to_server() -> Error:
+	if socket.get_ready_state() != WebSocketPeer.STATE_CLOSED:
+		return OK
+		
 	print("Connecting to Lumina Server: ", server_url)
 	var err = socket.connect_to_url(server_url)
 	if err != OK:
 		print("Could not connect to server: ", err)
+		is_connecting = false # Reset so we can try again
 	return err
 
 func send_message(type: String, payload: Dictionary = {}) -> void:

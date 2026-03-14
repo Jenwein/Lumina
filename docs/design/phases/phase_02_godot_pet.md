@@ -231,17 +231,17 @@ func get_screen_size() -> Vector2i:
 
 ## §6 Acceptance Criteria
 
-- [ ] Godot 窗口启动后背景完全透明，仅显示桌宠角色
-- [ ] 窗口始终置顶，桌宠以外区域的鼠标事件穿透到下层窗口
-- [ ] 右键桌宠角色可触发事件（本阶段打印日志即可）
-- [ ] 收到 `move_to` 指令后桌宠平滑移动到目标位置，到达后回到 idle
-- [ ] 收到 `set_state` 指令后桌宠切换到对应动画
-- [ ] 状态切换时发出 `state_changed` 信号
-- [ ] 桌宠朝移动方向自动翻转
+- [x] Godot 窗口启动后背景完全透明，仅显示桌宠角色
+- [x] 窗口始终置顶，桌宠以外区域的鼠标事件穿透到下层窗口
+- [x] 右键桌宠角色可触发事件（本阶段打印日志即可）
+- [x] 收到 `move_to` 指令后桌宠平滑移动到目标位置，到达后回到 idle
+- [x] 收到 `set_state` 指令后桌宠切换到对应动画
+- [x] 状态切换时发出 `state_changed` 信号
+- [x] 桌宠朝移动方向自动翻转
 
 ## §7 State Teardown Checklist
 
-- [ ] **Phase Document Updated** (if design changed during implementation)
-- [ ] `changelog.md` updated
-- [ ] `api_registry/godot_ui.md` updated
-- [ ] `master_overview.md` Phase 02 status set to `[x] Done`
+- [x] **Phase Document Updated** (if design changed during implementation)
+- [x] `changelog.md` updated
+- [x] `api_registry/godot_ui.md` updated
+- [x] `master_overview.md` Phase 02 status set to `[x] Done`

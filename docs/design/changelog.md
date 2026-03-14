@@ -33,6 +33,16 @@
 - **Godot Client**: Robust `LuminaWSClient` with automatic reconnection and handshake handling.
 - **Integration Tests**: Automated tests for connection handshake, heartbeat, and multiple client rejection.
 
+## [0.2.0] - 2026-03-14
+
+### Added
+- **Godot Pet Layer**: Implemented `PetController` for handling movement and state transitions.
+- **State Machine**: Built a generic `PetStateMachine` with `Idle`, `Walking`, `Thinking`, and `Typing` states.
+- **Window Management**: Implemented `WindowManager` for transparent, borderless, always-on-top windowing with dynamic mouse passthrough regions.
+- **WebSocket Integration**: Connected Godot Pet to Python Server via `pet_command` protocol (`move_to`, `set_state`).
+- **End-to-End Tests**: Verified the full loop from Python command to Godot animation/movement.
+- **Asset Placeholder**: Integrated `PlaceholderTexture2D` for rapid prototyping without external assets.
+
 ---
 
 *(Append new entries above this line)*

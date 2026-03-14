@@ -1,11 +1,91 @@
-[gd_scene load_steps=3 format=3 uid="uid://c8k8l6j4r4y2y"]
+[gd_scene load_steps=12 format=3 uid="uid://c8k8l6j4r4y2y"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_root"]
 [ext_resource type="Script" path="res://scripts/ws_client.gd" id="2_ws"]
+[ext_resource type="Script" path="res://scripts/window_manager.gd" id="3_wm"]
+[ext_resource type="Script" path="res://scripts/pet/pet_controller.gd" id="4_pet"]
+[ext_resource type="Script" path="res://scripts/pet/pet_state_machine.gd" id="6_sm"]
+[ext_resource type="Script" path="res://scripts/pet/states/idle_state.gd" id="7_idle"]
+[ext_resource type="Script" path="res://scripts/pet/states/walking_state.gd" id="8_walk"]
+[ext_resource type="Script" path="res://scripts/pet/states/thinking_state.gd" id="9_think"]
+[ext_resource type="Script" path="res://scripts/pet/states/typing_state.gd" id="10_type"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_v3r0"]
+size = Vector2(32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_v3r0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("PlaceholderTexture2D_v3r0")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("PlaceholderTexture2D_v3r0")
+}],
+"loop": true,
+"name": &"think",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("PlaceholderTexture2D_v3r0")
+}],
+"loop": true,
+"name": &"type",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("PlaceholderTexture2D_v3r0")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8y3u1"]
+size = Vector2(32, 32)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_root")
 
 [node name="WSClient" type="Node" parent="."]
 script = ExtResource("2_ws")
-heartbeat_interval = 30.0
+server_url = "ws://127.0.0.1:8765"
+
+[node name="WindowManager" type="Node" parent="."]
+script = ExtResource("3_wm")
+
+[node name="Pet" type="CharacterBody2D" parent="."]
+input_pickable = true
+script = ExtResource("4_pet")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="Pet"]
+sprite_frames = SubResource("SpriteFrames_v3r0")
+animation = &"idle"
+
+[node name="ClickArea" type="Area2D" parent="Pet"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pet/ClickArea"]
+shape = SubResource("RectangleShape2D_8y3u1")
+
+[node name="StateMachine" type="Node" parent="Pet"]
+script = ExtResource("6_sm")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="Pet/StateMachine"]
+script = ExtResource("7_idle")
+
+[node name="Walking" type="Node" parent="Pet/StateMachine"]
+script = ExtResource("8_walk")
+
+[node name="Thinking" type="Node" parent="Pet/StateMachine"]
+script = ExtResource("9_think")
+
+[node name="Typing" type="Node" parent="Pet/StateMachine"]
+script = ExtResource("10_type")

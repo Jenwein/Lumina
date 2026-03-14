@@ -35,9 +35,8 @@ class LuminaWSServer:
 
     async def _process_request(self, connection, request):
         if self._connection is not None:
-            logger.warning("Second connection attempt rejected during handshake.")
+            logger.warning(f"Second connection attempt from {connection.remote_address} rejected during handshake. Active connection: {self._connection.remote_address}")
             # Return a response that is NOT None to reject the handshake.
-            # 429 Too Many Requests or 403 Forbidden.
             return connection.respond(429, "Only one client allowed\r\n")
         return None
 
