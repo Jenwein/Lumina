@@ -9,6 +9,8 @@
 [ext_resource type="Script" path="res://scripts/pet/states/walking_state.gd" id="8_walk"]
 [ext_resource type="Script" path="res://scripts/pet/states/thinking_state.gd" id="9_think"]
 [ext_resource type="Script" path="res://scripts/pet/states/typing_state.gd" id="10_type"]
+[ext_resource type="Script" path="res://scripts/pet/states/observing_state.gd" id="11_observe"]
+[ext_resource type="Script" path="res://scripts/pet/states/clicking_state.gd" id="12_click"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_v3r0"]
 size = Vector2(32, 32)
@@ -89,3 +91,9 @@ script = ExtResource("9_think")
 
 [node name="Typing" type="Node" parent="Pet/StateMachine"]
 script = ExtResource("10_type")
+
+[node name="Observing" type="Node" parent="Pet/StateMachine"]
+script = ExtResource("11_observe")
+
+[node name="Clicking" type="Node" parent="Pet/StateMachine"]
+script = ExtResource("12_click")

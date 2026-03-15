@@ -13,6 +13,7 @@ class MessageType(str, Enum):
     USER_PROMPT_RESPONSE = "user_prompt_response"
     CLIENT_READY = "client_ready"
     PET_COMMAND = "pet_command"
+    PET_EVENT = "pet_event"
     AGENT_STATUS = "agent_status"
     CHAT_RESPONSE = "chat_response"
     CONFIRMATION_REQUEST = "confirmation_request"

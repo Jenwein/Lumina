@@ -2,7 +2,7 @@
 
 ## Meta
 - **Created**: 2026-03-14
-- **Last Updated**: 2026-03-14
+- **Last Updated**: 2026-03-15
 - **Status**: In Progress
 - **Complexity**: High
 
@@ -48,7 +48,7 @@
 
 | Phase | Title | Status | File Path | Dependencies |
 |-------|-------|--------|-----------|--------------|
-| 05 | 屏幕视觉与交互链路 | [ ] Pending | `./phases/phase_05_screen_vision.md` | Phase 02, Phase 04 |
+| 05 | 屏幕视觉与交互链路 | [x] Done | `./phases/phase_05_screen_vision.md` | Phase 02, Phase 04 |
 
 ### Stage 4: 扩展能力 (V0.4)
 

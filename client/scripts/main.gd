@@ -11,6 +11,7 @@ func _ready() -> void:
 	# Connect to pet signals for debugging
 	pet.state_changed.connect(_on_pet_state_changed)
 	pet.arrived_at_target.connect(_on_pet_arrived)
+	pet.click_ready.connect(_on_pet_click_ready)
 	
 	# Initial window setup
 	_update_window_passthrough()
@@ -27,21 +28,34 @@ func _on_message_received(msg: Dictionary) -> void:
 
 func _handle_pet_command(payload: Dictionary) -> void:
 	var command = payload.get("command", "")
-	var data = payload.get("data", {})
+	# Note: Python sends payload={"command": "...", "position": {...}, "state": "..."}
+	# But main.gd expects payload={"command": "...", "data": {...}}
+	# I should align them. Let's make it flexible.
 	
 	match command:
 		"move_to":
-			var target = Vector2(data.get("x", 0), data.get("y", 0))
-			var speed = data.get("speed", 200.0)
+			var pos = payload.get("position", payload.get("data", {}))
+			var target = Vector2(pos.get("x", 0), pos.get("y", 0))
+			var speed = payload.get("speed", payload.get("data", {}).get("speed", 200.0))
 			pet.move_to(target, speed)
 		"set_state":
-			var state = data.get("state", "idle")
+			var state = payload.get("state", payload.get("data", {}).get("state", "idle"))
 			pet.set_pet_state(state)
+		"perform_click":
+			var pos = payload.get("position", payload.get("data", {}))
+			var target = Vector2(pos.get("x", 0), pos.get("y", 0))
+			pet.perform_click(target)
 		"quit":
 			print("Received quit command, quitting.")
 			get_tree().quit()
 		_:
 			print("Unknown pet_command: ", command)
+
+func _on_pet_click_ready(pos: Vector2) -> void:
+	ws_client.send_message("pet_event", {
+		"event": "click_ready",
+		"position": {"x": pos.x, "y": pos.y}
+	})
 
 func _on_pet_state_changed(old_state: StringName, new_state: StringName) -> void:
 	print("Pet state changed: ", old_state, " -> ", new_state)

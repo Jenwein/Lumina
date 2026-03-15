@@ -5,6 +5,7 @@ extends CharacterBody2D
 
 signal arrived_at_target
 signal state_changed(old_state: StringName, new_state: StringName)
+signal click_ready(position: Vector2)
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var state_machine: PetStateMachine = $StateMachine
@@ -14,8 +15,31 @@ func _ready() -> void:
 	# Connect to state machine signals
 	state_machine.state_changed.connect(func(o, n): state_changed.emit(o, n))
 	
+	# Connect to ClickingState if it exists
+	var clicking = state_machine.states.get("clicking")
+	if clicking:
+		clicking.click_impact.connect(_on_click_impact)
+	
 	# Initial position: Center of viewport
 	global_position = get_viewport().get_visible_rect().size / 2.0
+
+func _on_click_impact() -> void:
+	click_ready.emit(global_position)
+
+func perform_click(target: Vector2) -> void:
+	# 1. Move to target
+	move_to(target)
+	
+	# 2. Once arrived, transition to clicking
+	# We need a way to wait for arrival. WalkingState usually emits arrived?
+	# Let's check walking_state.gd
+	var walk = state_machine.states["walking"]
+	if not walk.is_connected("arrived_at_target", _on_walking_arrived):
+		walk.arrived_at_target.connect(_on_walking_arrived, CONNECT_ONE_SHOT)
+
+func _on_walking_arrived() -> void:
+	# Arrived at target! Now click.
+	state_machine.transition_to("clicking")
 
 func move_to(target: Vector2, speed: float = 200.0) -> void:
 	# Transition to walking state and set target

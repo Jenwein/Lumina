@@ -7,6 +7,9 @@ from .file_tools import (
 from .app_tools import LaunchAppTool, CloseAppTool
 from .system_tools import GetSystemInfoTool, GetRunningProcessesTool
 from .interaction_tools import AskUserTool, NotifyUserTool
+from .vision_tools import (
+    InspectWindowTool, VisualLocateTool, ClickAtTool, TypeTextTool, HotkeyTool
+)
 
 __all__ = [
     "BaseTool",
@@ -23,5 +26,10 @@ __all__ = [
     "GetSystemInfoTool",
     "GetRunningProcessesTool",
     "AskUserTool",
-    "NotifyUserTool"
+    "NotifyUserTool",
+    "InspectWindowTool",
+    "VisualLocateTool",
+    "ClickAtTool",
+    "TypeTextTool",
+    "HotkeyTool"
 ]

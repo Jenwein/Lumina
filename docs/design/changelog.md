@@ -1,5 +1,26 @@
 # Changelog — Lumina
 
+## [0.3.0] - 2026-03-15 — Phase 05 — 视觉智能与交互链路
+
+### Delivered
+- **三级感知策略 (Perception Tiering)**: 实现 UI Automation (Tier 1) -> OCR (Tier 2) -> AI 视觉分析 (Tier 3) 的分层感知逻辑。
+- **活动窗口管理**: 实现 `WindowManager` 负责窗口查找、激活和 `WindowRect` 坐标获取。
+- **比例坐标转换**: 实现 `CoordinateConverter` 在相对窗口比例坐标 (0.0~1.0) 与屏幕绝对像素间双向转换。
+- **UI Automation (Tier 1)**: 基于 `uiautomation` 扫描窗口元素树并序列化为 AI 可读文本。
+- **OCR 识别 (Tier 2)**: 集成 `EasyOCR` 实现窗口区域文字识别与定位（替代环境不稳定的 PaddleOCR）。
+- **AI 视觉分析 (Tier 3)**: 实现基于多模态 LLM 的截图定位功能作为兜底。
+- **物理交互模拟**: 封装 `pyautogui` 实现平滑移动、点击、双击、右键、拖拽、文本输入和快捷键。
+- **视觉工具集**: 新增 `inspect_window`, `visual_locate`, `click_at`, `type_text`, `hotkey` 并注册到 Agent。
+- **交互链路闭环**: 实现"桌宠跑过去点击"完整链路，支持 Godot 状态回调 (`click_ready`) 触发物理操作。
+- **Godot 扩展**: 新增 `Observing` 和 `Clicking` 状态，支持 `perform_click` 指令和 `pet_event` 回馈。
+
+### Decisions
+- **OCR 引擎切换**: 因 PaddlePaddle 3.0 在当前 Windows/Python 3.12 环境下存在 oneDNN 兼容性问题，切换为更稳定的 `EasyOCR`。
+- **异步点击协调**: `ClickAtTool` 采用 `asyncio.Event` 监听 WebSocket 回传的 `pet_event:click_ready`，确保物理点击与动画同步。
+- **延迟加载策略**: OCR 模型和 UIA 扫描器仅在首次调用时初始化，减少服务启动开销。
+
+---
+
 ## 2026-03-15 — Phase 04 补充：用户交互工具
 
 ### Delivered

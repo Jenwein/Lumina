@@ -55,8 +55,16 @@ async def async_main():
         ToolRegistry, ReadFileTool, WriteFileTool, DeleteFileTool,
         ListDirectoryTool, CreateDirectoryTool, MoveFileTool,
         LaunchAppTool, CloseAppTool, GetSystemInfoTool, GetRunningProcessesTool,
-        AskUserTool, NotifyUserTool
+        AskUserTool, NotifyUserTool,
+        InspectWindowTool, VisualLocateTool, ClickAtTool, TypeTextTool, HotkeyTool
     )
+    from lumina.vision.window_info import WindowManager
+    from lumina.vision.ui_automation import UIAutomationScanner
+    from lumina.vision.capture import ScreenCapture
+    from lumina.vision.ocr import OcrEngine
+    from lumina.vision.ai_visual import AIVisualAnalyzer
+    from lumina.vision.perceiver import WindowPerceiver
+    from lumina.vision.interaction import PhysicalInteraction
     
     server = LuminaWSServer(
         host=config.ws_host,
@@ -64,6 +72,15 @@ async def async_main():
         heartbeat_interval=config.heartbeat_interval,
         heartbeat_timeout=config.heartbeat_timeout
     )
+
+    # Initialize Vision components
+    window_mgr = WindowManager()
+    uia_scanner = UIAutomationScanner()
+    capture = ScreenCapture()
+    ocr_engine = OcrEngine()
+    ai_analyzer = AIVisualAnalyzer(llm_client)
+    perceiver = WindowPerceiver(window_mgr, uia_scanner, capture, ocr_engine, ai_analyzer)
+    interaction = PhysicalInteraction()
 
     # Initialize Tool Registry
     registry = ToolRegistry()
@@ -79,6 +96,13 @@ async def async_main():
     registry.register(GetRunningProcessesTool())
     registry.register(AskUserTool(server))
     registry.register(NotifyUserTool(server))
+    
+    # Register Vision Tools
+    registry.register(InspectWindowTool(perceiver, server))
+    registry.register(VisualLocateTool(perceiver, server))
+    registry.register(ClickAtTool(perceiver, interaction, server))
+    registry.register(TypeTextTool(interaction))
+    registry.register(HotkeyTool(interaction))
 
     agent = AgentCore(
         llm_client=llm_client,
