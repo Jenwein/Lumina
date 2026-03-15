@@ -28,7 +28,8 @@ server/lumina/tools/
 ├── registry.py             # 工具注册表
 ├── file_tools.py           # 文件管理工具集
 ├── app_tools.py            # 应用控制工具集
-└── system_tools.py         # 系统状态工具集
+├── system_tools.py         # 系统状态工具集
+└── interaction_tools.py    # 用户交互工具集 (ask_user, notify_user)
 ```
 
 **设计原则**:
@@ -51,6 +52,44 @@ server/lumina/tools/
 | `close_app` | 关闭应用程序 | medium | `process_name: str` |
 | `get_system_info` | 获取系统信息 | low | 无 |
 | `get_running_processes` | 获取进程列表 | low | `filter: str \| None` |
+| `ask_user` | 向用户提问并等待回复 | low | `question: str, choices: list[str] \| None` |
+| `notify_user` | 向用户展示通知信息 | low | `message: str` |
+
+### 用户交互工具设计
+
+Agent 在自主执行任务时，遇到以下场景应主动向用户提问：
+
+- **意图不明确**: 用户的指令存在歧义，需要澄清
+- **缺少关键信息**: 如 "帮我发邮件" 但未指定收件人
+- **多选决策**: 存在多种可行方案，需用户选择
+- **风险确认前置**: 在执行有一定风险的操作前，先口头确认意图
+
+```
+Agent ReAct Loop
+       │
+       │ Thought: "用户说'删那个文件'，但不确定是哪个文件"
+       │
+       ▼
+  调用 ask_user("您想要删除哪个文件？请提供完整路径。")
+       │
+       ▼
+Python: 发送 user_prompt 消息给 Godot
+       │
+       ▼
+Godot: 桌宠显示带输入框的提问气泡
+       │
+       ├── 用户输入 "C:\Users\test.txt" 并提交
+       │     → Godot 发送 user_prompt_response
+       │     → 工具返回用户的回复文本给 Agent
+       │
+       └── 超时 (120s) / 用户关闭气泡
+             → 工具返回 "用户未回复"
+             → Agent 自行决定是否放弃或换种方式再问
+```
+
+**输入类型**:
+- `text`: 自由文本输入（默认）
+- `choice`: 选择题，用户从给定选项中选择
 
 ### 工具执行流程
 
@@ -232,6 +271,67 @@ class GetRunningProcessesTool(BaseTool):
     async def execute(self, filter: str | None = None) -> str: ...
 ```
 
+### 用户交互工具
+
+```python
+# server/lumina/tools/interaction_tools.py
+
+class AskUserTool(BaseTool):
+    name = "ask_user"
+    description = (
+        "向用户提出问题并等待回复。"
+        "当你不确定用户的意图、缺少关键信息、或需要用户在多个方案间做选择时使用此工具。"
+        "支持自由文本回复和选择题两种模式。"
+    )
+    parameters = {
+        "type": "object",
+        "properties": {
+            "question": {
+                "type": "string",
+                "description": "要向用户提出的问题"
+            },
+            "choices": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "可选。提供选项列表则为选择题模式，用户从中选择。不提供则为自由文本输入。"
+            }
+        },
+        "required": ["question"]
+    }
+    risk_level = RiskLevel.LOW
+
+    async def execute(self, question: str, choices: list[str] | None = None) -> str:
+        """发送提问给 Godot 前端，阻塞等待用户回复或超时。
+        
+        Returns:
+            用户的回复文本，或 "用户未回复（超时）"
+        """
+        ...
+
+
+class NotifyUserTool(BaseTool):
+    name = "notify_user"
+    description = (
+        "向用户展示一条通知消息。不等待用户回复，立即返回。"
+        "适用于告知用户任务进度、操作结果或提醒信息。"
+    )
+    parameters = {
+        "type": "object",
+        "properties": {
+            "message": {
+                "type": "string",
+                "description": "要展示给用户的消息内容"
+            }
+        },
+        "required": ["message"]
+    }
+    risk_level = RiskLevel.LOW
+
+    async def execute(self, message: str) -> str:
+        """通过 WebSocket 发送 show_bubble 命令，立即返回。"""
+        ...
+```
+
 ### Agent Core 集成
 
 ```python
@@ -246,6 +346,8 @@ registry.register(LaunchAppTool())
 registry.register(CloseAppTool())
 registry.register(GetSystemInfoTool())
 registry.register(GetRunningProcessesTool())
+registry.register(AskUserTool(ws_server))
+registry.register(NotifyUserTool(ws_server))
 
 agent = AgentCore(
     llm_client=llm_client,

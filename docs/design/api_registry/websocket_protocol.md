@@ -33,6 +33,7 @@
 | `config_get` | `{}` | [Phase 08](../phases/phase_08_platform_polish.md) | 请求当前配置 |
 | `config_update` | `{"models": [...], "active_model": str}` | [Phase 08](../phases/phase_08_platform_polish.md) | 更新配置 |
 | `config_test_model` | `{"model_name": str}` | [Phase 08](../phases/phase_08_platform_polish.md) | 测试模型连接 |
+| `user_prompt_response` | `{"prompt_id": str, "response": str\|null}` | [Phase 04](../phases/phase_04_tool_system.md) | 用户对 Agent 提问的回复 (null=超时/取消) |
 | `emergency_stop` | `{}` | [Phase 07](../phases/phase_07_security_privacy.md) | 紧急停止 |
 
 ## Server → Client 消息
@@ -44,6 +45,7 @@
 | `agent_status` | `{"status": str, "message": str}` | [Phase 01](../phases/phase_01_infrastructure.md) | Agent 状态变更 |
 | `chat_response` | `{"text": str, "streaming": bool, "done": bool}` | [Phase 01](../phases/phase_01_infrastructure.md) | 对话回复 |
 | `confirmation_request` | `{"description": str, "risk_level": str, "request_id": str}` | [Phase 01](../phases/phase_01_infrastructure.md), [Phase 07](../phases/phase_07_security_privacy.md) | 高危操作确认 |
+| `user_prompt` | `{"question": str, "prompt_id": str, "input_type": "text"\|"choice", "choices": [str]\|null, "timeout": int}` | [Phase 04](../phases/phase_04_tool_system.md) | Agent 向用户提问 |
 | `config_data` | `{完整配置}` | [Phase 08](../phases/phase_08_platform_polish.md) | 返回当前配置 |
 | `config_test_result` | `{"model_name": str, "success": bool, "message": str}` | [Phase 08](../phases/phase_08_platform_polish.md) | 测试结果 |
 

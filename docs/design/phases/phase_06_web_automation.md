@@ -218,19 +218,37 @@ class WebScreenshotTool(BaseTool):
 
 ## §6 Acceptance Criteria
 
-- [ ] `BrowserManager` 能正确启动和关闭 Chromium
-- [ ] 闲置超时后浏览器自动关闭
-- [ ] `web_navigate` 能打开网页并返回页面主要内容摘要
-- [ ] `web_search` 能执行搜索并返回结构化结果
-- [ ] `web_click` 能通过文本定位并点击页面元素
-- [ ] `web_fill` 能定位输入框并填入文字
-- [ ] 可见模式下浏览器窗口正常显示
-- [ ] Agent 能在对话中自主选择使用 Web 工具
-- [ ] `pytest server/tests/test_web_tools.py` 全部通过
+**⚠ MANDATORY: Every item must be verified and checked `[x]` before proceeding to §7.**
+
+### Functional Verification
+- [ ] `BrowserManager.ensure_browser()` 能正确启动 Chromium 实例
+- [ ] `BrowserManager.close()` 能干净关闭浏览器并释放资源
+- [ ] 闲置超过 5 分钟后浏览器自动关闭 (验证 `idle_timeout` 逻辑)
+- [ ] 浏览器崩溃后 `ensure_browser()` 能自动恢复
+- [ ] `web_navigate` 能打开网页并返回页面标题和主要内容摘要
+- [ ] `web_search` 能执行搜索引擎查询并返回前 5 条结构化结果
+- [ ] `web_click` 能通过文本内容定位并点击页面元素 (按钮/链接)
+- [ ] `web_fill` 能通过 placeholder/label 定位输入框并填入文字
+- [ ] `web_screenshot` 能截取页面截图
+- [ ] `visible=true` 时浏览器窗口正常显示
+- [ ] `ContentExtractor.extract_text()` 能提取页面正文并去除导航/广告
+
+### Test Verification
+- [ ] 单元测试 `pytest server/tests/test_web_tools.py` 通过，0 failures
+- [ ] 测试覆盖: `BrowserManager` 生命周期、`ContentExtractor`、各工具的正常/异常路径
+
+### Integration Verification
+- [ ] 端到端: Godot 发送 "帮我搜索今天的天气" → Agent 自动选择 `web_search` → 返回搜索结果
+
+### Code Quality
+- [ ] `server/lumina/tools/web/` 下所有文件无 linter 错误
 
 ## §7 State Teardown Checklist
 
-- [ ] **Phase Document Updated** (if design changed during implementation)
-- [ ] `changelog.md` updated
-- [ ] `api_registry/tool_system.md` updated (新增 Web 工具)
-- [ ] `master_overview.md` Phase 06 status set to `[x] Done`
+**⚠ MANDATORY: Every item is a concrete action. Complete each one and check `[x]`.**
+
+- [ ] **§3/§4 Updated**: 若实现中设计/接口有变，更新本文档 §3 和 §4 使其与最终代码一致
+- [ ] **changelog.md**: 追加本阶段条目 (Delivered/Decisions/Deferred) → `../changelog.md`
+- [ ] **api_registry/tool_system.md**: 新增 Web 工具 (6个) 和 `BrowserManager`/`ContentExtractor` 支撑模块 → `../api_registry/tool_system.md`
+- [ ] **master_overview.md**: 将 Phase 06 状态改为 `[x] Done` → `../master_overview.md`
+- [ ] **§2 checkboxes**: 将本文档 §2 中所有 Reference Materials 和 Source files 标记为 `[x]`

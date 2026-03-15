@@ -28,15 +28,22 @@
 | `get_system_info` | `GetSystemInfoTool` | LOW | [Phase 04](../phases/phase_04_tool_system.md) | 获取 OS/CPU/内存等系统信息 |
 | `get_running_processes` | `GetRunningProcessesTool` | LOW | [Phase 04](../phases/phase_04_tool_system.md) | 获取进程列表 |
 
+## 用户交互工具 (Phase 04)
+
+| 工具名 | 类 | 风险 | Origin Phase | 说明 |
+|--------|-----|------|-------------|------|
+| `ask_user` | `AskUserTool` | LOW | [Phase 04](../phases/phase_04_tool_system.md) | Agent 向用户提问并等待回复。支持自由文本和选择题。通过 `user_prompt` / `user_prompt_response` WebSocket 消息实现 |
+| `notify_user` | `NotifyUserTool` | LOW | [Phase 04](../phases/phase_04_tool_system.md) | Agent 向用户展示通知信息，不等待回复。通过 `show_bubble` pet_command 实现 |
+
 ## 视觉工具 (Phase 05)
 
 | 工具名 | 类 | 风险 | Origin Phase | 说明 |
 |--------|-----|------|-------------|------|
-| `capture_screen` | `CaptureScreenTool` | LOW | [Phase 05](../phases/phase_05_screen_vision.md) | 截图 + OCR，受 PrivacyGuard 保护 |
-| `click_at` | `ClickAtTool` | MEDIUM | [Phase 05](../phases/phase_05_screen_vision.md) | 桌宠跑到坐标并点击 |
-| `type_text` | `TypeTextTool` | LOW | [Phase 05](../phases/phase_05_screen_vision.md) | 在焦点位置输入文字 |
+| `inspect_window` | `InspectWindowTool` | LOW | [Phase 05](../phases/phase_05_screen_vision.md) | 三级感知(UIA→OCR→AI)扫描活动窗口元素，返回比例坐标 |
+| `visual_locate` | `VisualLocateTool` | LOW | [Phase 05](../phases/phase_05_screen_vision.md) | AI 视觉分析兜底，定位图标/无标签控件(需模型支持图像) |
+| `click_at` | `ClickAtTool` | MEDIUM | [Phase 05](../phases/phase_05_screen_vision.md) | 按比例坐标(0.0~1.0)点击活动窗口元素，驱动桌宠跑过去点击 |
+| `type_text` | `TypeTextTool` | LOW | [Phase 05](../phases/phase_05_screen_vision.md) | 在当前焦点位置输入文字 |
 | `hotkey` | `HotkeyTool` | MEDIUM | [Phase 05](../phases/phase_05_screen_vision.md) | 执行快捷键组合 |
-| `find_and_click` | `FindAndClickTool` | MEDIUM | [Phase 05](../phases/phase_05_screen_vision.md) | OCR 查找文字并点击 |
 
 ## Web 工具 (Phase 06)
 
@@ -53,8 +60,13 @@
 
 | Interface | File Path | Origin Phase (Link) | Usage Note |
 |-----------|-----------|---------------------|------------|
-| `ScreenCapture` | `server/lumina/vision/capture.py` | [Phase 05](../phases/phase_05_screen_vision.md) | 基于 mss 的屏幕截图 |
-| `OcrEngine` | `server/lumina/vision/ocr.py` | [Phase 05](../phases/phase_05_screen_vision.md) | PaddleOCR 封装，延迟加载 |
+| `WindowManager` | `server/lumina/vision/window_info.py` | [Phase 05](../phases/phase_05_screen_vision.md) | 活动窗口查找/激活/矩形获取 (win32gui) |
+| `CoordinateConverter` | `server/lumina/vision/coordinates.py` | [Phase 05](../phases/phase_05_screen_vision.md) | 比例坐标(0~1) ↔ 屏幕像素的双向换算 |
+| `UIAutomationScanner` | `server/lumina/vision/ui_automation.py` | [Phase 05](../phases/phase_05_screen_vision.md) | Tier 1: Windows UIA 元素树扫描 |
+| `ScreenCapture` | `server/lumina/vision/capture.py` | [Phase 05](../phases/phase_05_screen_vision.md) | Tier 2: 活动窗口区域截图 + 缩放 (mss) |
+| `OcrEngine` | `server/lumina/vision/ocr.py` | [Phase 05](../phases/phase_05_screen_vision.md) | Tier 2: PaddleOCR 封装，延迟加载，结果含比例坐标 |
+| `AIVisualAnalyzer` | `server/lumina/vision/ai_visual.py` | [Phase 05](../phases/phase_05_screen_vision.md) | Tier 3: 多模态截图分析兜底，需模型支持图像 |
+| `WindowPerceiver` | `server/lumina/vision/perceiver.py` | [Phase 05](../phases/phase_05_screen_vision.md) | 三级感知编排器: UIA → OCR → AI 视觉 |
 | `PhysicalInteraction` | `server/lumina/vision/interaction.py` | [Phase 05](../phases/phase_05_screen_vision.md) | pyautogui 物理操作封装 |
 | `BrowserManager` | `server/lumina/tools/web/browser_manager.py` | [Phase 06](../phases/phase_06_web_automation.md) | Playwright 浏览器生命周期管理 |
 | `ContentExtractor` | `server/lumina/tools/web/content_extractor.py` | [Phase 06](../phases/phase_06_web_automation.md) | 网页结构化内容提取 |

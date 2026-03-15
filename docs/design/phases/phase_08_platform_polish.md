@@ -242,20 +242,55 @@ func exit_low_power() -> void:
 
 ## §6 Acceptance Criteria
 
-- [ ] Windows 上完整功能正常运行
-- [ ] macOS 上完成权限引导，截图和交互正常（需 macOS 环境测试）
-- [ ] Linux X11 上截图和交互正常
-- [ ] 多模型配置面板可添加/编辑/删除 API 配置
-- [ ] 切换模型后 Agent 使用新模型回复
-- [ ] 测试连接功能正确反馈成功/失败
-- [ ] 桌宠闲置 30s 后帧率降至 10fps，有交互时恢复 60fps
-- [ ] PaddleOCR 首次调用延迟加载
-- [ ] 一键启动脚本可正常启动完整系统
-- [ ] 用户文档完整覆盖安装和使用流程
+**⚠ MANDATORY: Every item must be verified and checked `[x]` before proceeding to §7.**
+
+### Functional Verification — 跨平台
+- [ ] Windows: 完整功能正常运行 (截图、UIA、OCR、点击、Web自动化)
+- [ ] macOS: 权限引导 UI 正确弹出，授权后截图和交互正常 (需 macOS 环境)
+- [ ] macOS: `PlatformAdapter.check_accessibility_permission()` 正确检测权限状态
+- [ ] Linux X11: 截图和交互正常
+- [ ] Linux Wayland: 通过 XDG Desktop Portal 截图正常 (需 Wayland 环境)
+- [ ] `PlatformAdapter` 各平台实现能正确获取前台应用名和显示器信息
+
+### Functional Verification — 配置面板
+- [ ] Godot 设置面板可添加新 API 配置 (名称、Base URL、Key、模型名)
+- [ ] 设置面板可编辑和删除已有配置
+- [ ] 切换活跃模型后，Agent 下次回复使用新模型
+- [ ] 测试连接按钮: 成功时显示成功提示，失败时显示错误原因
+- [ ] 配置变更通过 `config_update` 消息正确持久化到 `config.yaml`
+
+### Functional Verification — 资源优化
+- [ ] 桌宠闲置 30s 后 `PerformanceManager` 将帧率降至 10fps
+- [ ] 用户交互 (鼠标/键盘/消息) 时帧率恢复至 60fps
+- [ ] PaddleOCR 模型在首次 `recognize()` 调用时才初始化 (验证启动时无加载延迟)
+
+### Functional Verification — 打包发布
+- [ ] `start_lumina.bat` (Windows) 一键启动: Python 服务 → Godot 客户端
+- [ ] `start_lumina.sh` (Unix) 一键启动正常
+- [ ] PyInstaller 打包后的可执行文件能正常运行
+
+### Test Verification
+- [ ] 各平台适配代码的单元测试通过
+- [ ] 配置消息的序列化/反序列化测试通过
+
+### Documentation Verification
+- [ ] 用户文档包含: 安装指南、快速上手、API 配置说明、常见问题
+- [ ] README.md 更新安装和使用说明
+
+### Code Quality
+- [ ] 所有 Python 文件无 linter 错误
+- [ ] 所有 GDScript 文件无警告
 
 ## §7 State Teardown Checklist
 
-- [ ] **Phase Document Updated** (if design changed during implementation)
-- [ ] `changelog.md` updated
-- [ ] 所有 `api_registry/` 文件最终审查更新
-- [ ] `master_overview.md` Phase 08 status set to `[x] Done`, overall status → Completed
+**⚠ MANDATORY: Every item is a concrete action. Complete each one and check `[x]`.**
+
+- [ ] **§3/§4 Updated**: 若实现中设计/接口有变，更新本文档 §3 和 §4 使其与最终代码一致
+- [ ] **changelog.md**: 追加最终发布条目 (Delivered/Decisions/Deferred) → `../changelog.md`
+- [ ] **api_registry/ 全量审查**: 逐个检查以下文件，确保所有接口与最终代码一致:
+    - [ ] `../api_registry/websocket_protocol.md` — 包含 `config_*` 消息
+    - [ ] `../api_registry/agent_core.md` — `ModelConfig` 等与实际一致
+    - [ ] `../api_registry/tool_system.md` — 所有工具条目完整
+    - [ ] `../api_registry/godot_ui.md` — `SettingsPanel`、`PerformanceManager` 等已记录
+- [ ] **master_overview.md**: 将 Phase 08 状态改为 `[x] Done`，整体 Status 改为 `Completed` → `../master_overview.md`
+- [ ] **§2 checkboxes**: 将本文档 §2 中所有 Reference Materials 和 Source files 标记为 `[x]`

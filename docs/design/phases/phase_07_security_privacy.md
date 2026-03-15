@@ -310,23 +310,52 @@ func _ready() -> void:
 
 ## §6 Acceptance Criteria
 
-- [ ] `HIGH` 风险工具调用时，Godot 显示确认气泡
-- [ ] 用户点击确认后工具正常执行
-- [ ] 用户点击取消或超时 60s 后操作被取消
-- [ ] 单步模式下所有工具调用都需确认
-- [ ] 紧急停止按钮能立即终止 ReAct 循环
-- [ ] 前台应用在黑名单中时 `capture_screen` 返回拒绝信息
-- [ ] 隐私遮罩正确覆盖配置的屏幕区域
-- [ ] 多显示器信息正确获取并同步给 Godot
-- [ ] 对话气泡能显示文本并随桌宠移动
-- [ ] 右键菜单能弹出并响应各菜单项
-- [ ] `pytest server/tests/test_security.py` 全部通过
+**⚠ MANDATORY: Every item must be verified and checked `[x]` before proceeding to §7.**
+
+### Functional Verification — 安全拦截
+- [ ] `SecurityInterceptor`: HIGH 风险工具调用时，Godot 显示醒目确认气泡
+- [ ] 用户点击 [确认] 后工具正常执行并返回结果
+- [ ] 用户点击 [取消] 后工具返回 "用户取消了此操作"
+- [ ] 超时 60s 无响应后操作自动取消
+- [ ] 单步模式 (`step_mode=True`) 下 LOW/MEDIUM/HIGH 所有工具调用都需确认
+- [ ] `EmergencyStop.trigger()` 能立即终止当前 ReAct 循环
+
+### Functional Verification — 隐私保护
+- [ ] `PrivacyGuard.is_foreground_blacklisted()`: 黑名单应用在前台时返回 True
+- [ ] 前台应用在黑名单中时 `inspect_window` / `capture_screen` 返回拒绝信息而非截图
+- [ ] `PrivacyGuard.apply_mask()`: 隐私遮罩区域被纯色正确覆盖
+
+### Functional Verification — 多显示器
+- [ ] `MonitorManager.get_all_monitors()` 正确返回所有显示器信息 (位置、尺寸、主副)
+- [ ] `server_ready` 消息中 `monitors` 字段包含完整显示器列表
+
+### Functional Verification — Godot UI
+- [ ] `SpeechBubble.show_message()` 显示对话气泡，随桌宠移动
+- [ ] `SpeechBubble.show_confirmation()` 显示带确认/取消按钮的警告气泡
+- [ ] 确认气泡的 [确认]/[取消] 按钮通过 WebSocket 正确发送 `user_action`
+- [ ] 右键菜单弹出并包含所有菜单项 (对话/模型/设置/日志/单步/紧急停止)
+- [ ] 右键菜单各项点击后发出对应信号
+
+### Test Verification
+- [ ] 单元测试 `pytest server/tests/test_security.py` 通过，0 failures
+- [ ] 测试覆盖: 拦截逻辑、超时取消、黑名单检测、遮罩应用、紧急停止
+
+### Integration Verification
+- [ ] 端到端: Agent 调用 `delete_file` → Godot 显示确认气泡 → 用户确认 → 文件删除 → Agent 收到结果
+- [ ] 端到端: 紧急停止按钮 → Agent 立即停止当前操作 → 桌宠回到 idle
+
+### Code Quality
+- [ ] `server/lumina/security/` 下所有文件无 linter 错误
+- [ ] `client/scripts/ui/` 下所有文件无 GDScript 警告
 
 ## §7 State Teardown Checklist
 
-- [ ] **Phase Document Updated** (if design changed during implementation)
-- [ ] `changelog.md` updated
-- [ ] `api_registry/websocket_protocol.md` updated (monitors 字段, emergency_stop)
-- [ ] `api_registry/godot_ui.md` updated (SpeechBubble, ContextMenu)
-- [ ] `api_registry/tool_system.md` updated (安全拦截层)
-- [ ] `master_overview.md` Phase 07 status set to `[x] Done`
+**⚠ MANDATORY: Every item is a concrete action. Complete each one and check `[x]`.**
+
+- [ ] **§3/§4 Updated**: 若实现中设计/接口有变，更新本文档 §3 和 §4 使其与最终代码一致
+- [ ] **changelog.md**: 追加本阶段条目 (Delivered/Decisions/Deferred) → `../changelog.md`
+- [ ] **api_registry/websocket_protocol.md**: 更新 `server_ready` 的 monitors 字段、新增 `emergency_stop` → `../api_registry/websocket_protocol.md`
+- [ ] **api_registry/godot_ui.md**: 新增 `SpeechBubble`、`PetContextMenu` 组件和相关信号 → `../api_registry/godot_ui.md`
+- [ ] **api_registry/tool_system.md**: 新增 `SecurityInterceptor`、`PrivacyGuard`、`MonitorManager` → `../api_registry/tool_system.md`
+- [ ] **master_overview.md**: 将 Phase 07 状态改为 `[x] Done` → `../master_overview.md`
+- [ ] **§2 checkboxes**: 将本文档 §2 中所有 Reference Materials 和 Source files 标记为 `[x]`

@@ -1,5 +1,40 @@
 # Changelog — Lumina
 
+## 2026-03-15 — Phase 04 补充：用户交互工具
+
+### Delivered
+- 在 `phase_04_tool_system.md` 中新增 `ask_user` 和 `notify_user` 工具定义
+- 更新 `api_registry/tool_system.md` 新增用户交互工具分类
+- 更新 `api_registry/websocket_protocol.md` 新增 `user_prompt` / `user_prompt_response` 消息
+
+### Decisions
+- `ask_user` 支持两种输入模式: 自由文本 (`text`) 和选择题 (`choice`)
+- 提问超时默认 120s，超时后返回 "用户未回复" 给 Agent，Agent 自行决定后续行为
+- `notify_user` 为非阻塞通知，通过 `show_bubble` pet_command 实现
+- 交互工具需要 WebSocket 服务实例引用，构造时注入 `ws_server`
+
+---
+
+## 2026-03-15 — Phase 05 设计重构：三级感知策略
+
+### Delivered
+- 重写 `phase_05_screen_vision.md`，用三级感知策略替换原方案
+- 更新 `api_registry/tool_system.md` 中的视觉工具和支撑模块
+
+### Decisions
+- **三级感知策略**: Tier 1 UI Automation (最快/最准/零成本) → Tier 2 OCR 文本提取 (快速/低成本) → Tier 3 AI 视觉分析 (兜底/高成本)
+- **活动窗口聚焦**: 不做全屏截图，仅截取目标应用活动窗口区域，减少信息噪声和 token 开销
+- **比例坐标系**: AI 统一返回 (rx, ry) 比例值 (0.0~1.0)，系统根据窗口实际位置/尺寸换算为屏幕绝对像素，解决截图缩放与分辨率不一致问题
+- **OCR 数据先序列化再推理**: OCR 结果序列化为纯文本发给 AI 进行逻辑推理，而非依赖 AI 视觉能力直接看截图
+- **Tier 3 仅为兜底**: 仅当 UIA 和 OCR 均无法定位目标 (如图标、无标签控件) 时，才发送缩放后的窗口截图给 AI
+- **工具重构**: 原 `capture_screen` + `find_and_click` 合并重构为 `inspect_window` + `visual_locate` + `click_at`(比例坐标)
+- **新增支撑模块**: `WindowManager`, `CoordinateConverter`, `UIAutomationScanner`, `AIVisualAnalyzer`, `WindowPerceiver`
+
+### Deferred
+- macOS/Linux 平台的 UIA 替代方案 (macOS: NSAccessibility, Linux: AT-SPI) 留待 Phase 08
+
+---
+
 ## 2026-03-14 — 初始化：设计文档体系搭建
 
 ### Delivered

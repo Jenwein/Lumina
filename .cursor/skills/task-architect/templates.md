@@ -62,26 +62,38 @@
 ## §4 Interface Contract
 [Public APIs this phase will create or modify — signature-level detail]
 
-```python
-# Example
-class UserService:
-    def create_user(self, data: CreateUserDTO) -> User: ...
-```
-
 ## §5 Implementation Steps
 1. [Concrete step with file path and action]
 2. [Concrete step]
 
 ## §6 Acceptance Criteria
-- [ ] Tests written at `tests/...`
-- [ ] Command `[test/build CLI command]` passes
-- [ ] Linter/formatter check passes
+
+**⚠ MANDATORY: Every item must be verified and checked `[x]` before proceeding to §7.**
+
+### Functional Verification
+- [ ] [Specific testable behavior 1 — describe what to test and expected outcome]
+- [ ] [Specific testable behavior 2]
+
+### Test Verification
+- [ ] Unit tests written at `tests/[specific_path]`
+- [ ] Command `[exact test command, e.g. pytest server/tests/test_xxx.py]` passes with 0 failures
+
+### Integration Verification
+- [ ] [End-to-end scenario: input → expected output]
+
+### Code Quality
+- [ ] No linter errors in modified files
+- [ ] No type errors (if using type checker)
 
 ## §7 State Teardown Checklist
-- [ ] **Phase Document Updated** (if design changed during implementation)
-- [ ] `changelog.md` updated
-- [ ] `api_registry/` index updated
-- [ ] `master_overview.md` phase status set to `[x] Done`
+
+**⚠ MANDATORY: Every item is a concrete action. Complete each one and check `[x]`.**
+
+- [ ] **§3/§4 Updated**: If any design/interface changed during implementation, update this phase document to match the final code. The document must reflect reality, not the original plan.
+- [ ] **changelog.md**: Append entry with `### Delivered`, `### Decisions`, `### Deferred` sections. [Path: `../changelog.md`]
+- [ ] **api_registry/**: Add/update all new or changed public interfaces. Each must have: file path, origin phase link, usage note. [Path: `../api_registry/[module].md`]
+- [ ] **master_overview.md**: Set this phase status to `[x] Done`. [Path: `../master_overview.md`]
+- [ ] **§2 checkboxes**: Mark all Reference Materials and Source files as `[x]` (confirming they were read).
 ```
 
 ---
