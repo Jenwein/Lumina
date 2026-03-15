@@ -6,6 +6,7 @@ from .file_tools import (
 )
 from .app_tools import LaunchAppTool, CloseAppTool
 from .system_tools import GetSystemInfoTool, GetRunningProcessesTool
+from .interaction_tools import AskUserTool, NotifyUserTool
 
 __all__ = [
     "BaseTool",
@@ -20,5 +21,7 @@ __all__ = [
     "LaunchAppTool",
     "CloseAppTool",
     "GetSystemInfoTool",
-    "GetRunningProcessesTool"
+    "GetRunningProcessesTool",
+    "AskUserTool",
+    "NotifyUserTool"
 ]

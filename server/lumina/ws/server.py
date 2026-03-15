@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import json
-from typing import Awaitable, Callable, Optional, Set
+from typing import Awaitable, Callable, Optional, Set, Dict as TypingDict
 from websockets.asyncio.server import serve, ServerConnection
 from websockets.exceptions import ConnectionClosed
 
@@ -19,6 +19,7 @@ class LuminaWSServer:
         self._connection: Optional[ServerConnection] = None
         self._handlers: Set[Callable[[Message], Awaitable[None]]] = set()
         self._stop_event = asyncio.Event()
+        self._pending_responses: TypingDict[str, asyncio.Future[Message]] = {}
 
     async def start(self) -> None:
         async with serve(
@@ -61,6 +62,37 @@ class LuminaWSServer:
         else:
             logger.warning("No active connection to send message.")
 
+    async def request(self, message: Message, timeout: float = 120.0) -> Message:
+        """发送请求并等待响应。"""
+        if not self._connection:
+            raise ConnectionError("No active connection")
+        
+        future = asyncio.get_running_loop().create_future()
+        self._pending_responses[message.id] = future
+        
+        await self.send(message)
+        
+        try:
+            return await asyncio.wait_for(future, timeout=timeout)
+        except asyncio.TimeoutError:
+            if message.id in self._pending_responses:
+                del self._pending_responses[message.id]
+            raise
+        except Exception:
+            if message.id in self._pending_responses:
+                del self._pending_responses[message.id]
+            raise
+
+    async def _handle_response(self, msg: Message) -> bool:
+        """检查并处理响应消息。如果消息被处理则返回 True。"""
+        reply_to = msg.payload.get("reply_to")
+        if reply_to and reply_to in self._pending_responses:
+            future = self._pending_responses.pop(reply_to)
+            if not future.done():
+                future.set_result(msg)
+            return True
+        return False
+
     async def _handle_connection(self, websocket: ServerConnection) -> None:
         if self._connection is not None:
             logger.warning("Second connection attempt rejected. Lumina supports only one client.")
@@ -74,6 +106,10 @@ class LuminaWSServer:
             async for message_str in websocket:
                 try:
                     msg = Message.from_json(message_str)
+                    
+                    # 检查是否是响应消息
+                    if await self._handle_response(msg):
+                        continue
                     
                     if msg.type == MessageType.CLIENT_READY:
                         logger.info(f"Received client_ready: {msg.payload}")

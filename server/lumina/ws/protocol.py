@@ -9,6 +9,8 @@ from pydantic import BaseModel, Field
 class MessageType(str, Enum):
     USER_MESSAGE = "user_message"
     USER_ACTION = "user_action"
+    USER_PROMPT = "user_prompt"
+    USER_PROMPT_RESPONSE = "user_prompt_response"
     CLIENT_READY = "client_ready"
     PET_COMMAND = "pet_command"
     AGENT_STATUS = "agent_status"

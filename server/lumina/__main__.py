@@ -54,9 +54,17 @@ async def async_main():
     from lumina.tools import (
         ToolRegistry, ReadFileTool, WriteFileTool, DeleteFileTool,
         ListDirectoryTool, CreateDirectoryTool, MoveFileTool,
-        LaunchAppTool, CloseAppTool, GetSystemInfoTool, GetRunningProcessesTool
+        LaunchAppTool, CloseAppTool, GetSystemInfoTool, GetRunningProcessesTool,
+        AskUserTool, NotifyUserTool
     )
     
+    server = LuminaWSServer(
+        host=config.ws_host,
+        port=config.ws_port,
+        heartbeat_interval=config.heartbeat_interval,
+        heartbeat_timeout=config.heartbeat_timeout
+    )
+
     # Initialize Tool Registry
     registry = ToolRegistry()
     registry.register(ReadFileTool())
@@ -69,6 +77,8 @@ async def async_main():
     registry.register(CloseAppTool())
     registry.register(GetSystemInfoTool())
     registry.register(GetRunningProcessesTool())
+    registry.register(AskUserTool(server))
+    registry.register(NotifyUserTool(server))
 
     agent = AgentCore(
         llm_client=llm_client,
@@ -83,13 +93,6 @@ async def async_main():
             tool.to_tool_definition(),
             tool.execute
         )
-    
-    server = LuminaWSServer(
-        host=config.ws_host,
-        port=config.ws_port,
-        heartbeat_interval=config.heartbeat_interval,
-        heartbeat_timeout=config.heartbeat_timeout
-    )
     
     # Status callback for Agent
     async def on_agent_status(status: str, message: str):
