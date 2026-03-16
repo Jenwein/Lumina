@@ -1,8 +1,0 @@
-# .agent/STATE.md (Hot - Single Source of Truth)
-- CURRENT_TASK: {task_path}
-- STATUS: {status_enum}
-- RETRY_COUNT: {retry_count}
-
-## Constraints
-- Minimal. No code logic. Only state transition info.
-- This is the FIRST file to read upon session wake-up.

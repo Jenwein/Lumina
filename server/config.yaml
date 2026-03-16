@@ -1,0 +1,12 @@
+ws_host: "localhost"
+ws_port: 8765
+active_model: "glm-4-flash"
+models:
+  - name: "glm-4-flash"
+    api_base: "https://open.bigmodel.cn/api/paas/v4/"
+    api_key_env: "GLM_API_KEY"
+    model: "glm-4-flash"
+agent:
+  system_prompt: "你是一个可爱的桌宠助手，名叫 Lumina。说话要俏皮一点，多用表情符号。"
+  max_react_iterations: 10
+  history_window: 20
