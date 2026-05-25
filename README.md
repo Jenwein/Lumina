@@ -10,3 +10,6 @@ Dynamic Presence: Watch your assistant "walk" to a button, "press" it, and celeb
 Seamless Overlay: A lightweight, transparent interface that lives on your topmost layer without interrupting your workflow.
 
 LLM-Powered Logic: Powered by cutting-edge AI to decompose complex user intents into precise desktop operations.
+
+
+本仓库 need Ravel 作为Agent Core,后续将删除重来
